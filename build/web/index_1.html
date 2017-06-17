@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Welcome!</title>	
+<link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+
+<h1>Press key to update game state</h1>
+
+<script>
+"use strict";
+const uri = 'gameUpdate';
+
+new EventSource(uri).onmessage = function (e) {
+    
+    //let obj = JSON.parse(e.data);
+    
+    console.log(e.data);
+    
+    /*
+    let s = JSON.stringify(obj, '\r\n');
+    let node = document.createTextNode(s);
+    let pre = document.createElement('pre');
+    pre.appendChild(node);
+    document.body.appendChild(pre);
+    console.log('Received '+ node.textContent);
+*/
+};
+
+let xhr = new XMLHttpRequest();
+window.addEventListener("keydown", function(event) {
+    if (event.preventDefaulted) {
+      return; // Do nothing if event already handled
+    }
+    /*
+    xhr.open('POST', uri);
+    xhr.setRequestHeader('Content-Type','text/plain');
+    xhr.send("keypress?"+event.code);
+    */
+   
+    xhr.open("POST",uri+"?keypress=" + event.code,true);
+    xhr.send(); 
+    console.log('Sent '+ event.code);
+
+    // Consume the event so it doesn't get handled twice
+    event.preventDefault();
+}, true);
+</script>      
+</body>
+</html>
